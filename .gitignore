@@ -1,0 +1,21 @@
+# Android / IntelliJ
+build/
+.gradle/
+app/build/
+.cxx/
+local.properties
+.idea/workspace.xml
+.idea/shelf/
+.idea/libraries/
+.DS_Store
+*.apk
+*.flat
+capture/
+memory_heap_dumps/
+
+# Kotlin
+.kotlin/
+kotlin-daemon-*.sys.log
+
+# NDK
+obj/
