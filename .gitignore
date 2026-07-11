@@ -12,6 +12,7 @@ local.properties
 *.flat
 capture/
 memory_heap_dumps/
+.idea/
 
 # Kotlin
 .kotlin/
