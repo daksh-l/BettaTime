@@ -99,6 +99,12 @@ public:
 
     bool isBrokeOut() const { return wallet <= 0; }
 
+    // testing helper only -- forces the wallet to a specific value
+    // regardless of round state. Not reachable through normal play.
+    void debugSetWallet(int minutes) {
+        wallet = minutes;
+    }
+
 private:
     int wallet;
     Deck deck;

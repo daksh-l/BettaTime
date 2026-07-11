@@ -70,6 +70,11 @@ static jstring nativeGetPlayerHand(JNIEnv* env, jobject, jlong handle) {
     return env->NewStringUTF(asGame(handle)->getPlayerHand().toString().c_str());
 }
 
+// testing only -- see debugSetWallet() in blackjack_game.h
+static void nativeDebugSetWallet(JNIEnv*, jobject, jlong handle, jint minutes) {
+    asGame(handle)->debugSetWallet(minutes);
+}
+
 // revealAll = false hides everything but the dealer's first card,
 // matching how a real table looks before the round is settled
 static jstring nativeGetDealerHand(JNIEnv* env, jobject, jlong handle, jboolean revealAll) {
@@ -97,6 +102,7 @@ static const JNINativeMethod kMethods[] = {
     { "nativeIsBrokeOut",     "(J)Z",                     (void*)nativeIsBrokeOut },
     { "nativeGetPlayerHand",  "(J)Ljava/lang/String;",    (void*)nativeGetPlayerHand },
     { "nativeGetDealerHand",  "(JZ)Ljava/lang/String;",   (void*)nativeGetDealerHand },
+    { "nativeDebugSetWallet", "(JI)V",                    (void*)nativeDebugSetWallet },
 };
 
 extern "C" JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void*) {

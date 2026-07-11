@@ -51,6 +51,14 @@ class BlackjackEngine(startingMinutes: Int) : AutoCloseable {
     // player is still deciding hit/stand
     fun getDealerHand(revealAll: Boolean): String = nativeGetDealerHand(handle, revealAll)
 
+    // testing only -- forces the wallet to `minutes` (default 10) and
+    // resets to a clean betting state. Only reachable via the hidden
+    // passcode dialog, not part of normal gameplay.
+    fun debugResetWallet(minutes: Int = 10) {
+        nativeDebugSetWallet(handle, minutes)
+        nativeNewRound(handle)
+    }
+
     override fun close() {
         if (handle != 0L) {
             nativeDestroy(handle)
@@ -80,6 +88,7 @@ class BlackjackEngine(startingMinutes: Int) : AutoCloseable {
     private external fun nativeIsBrokeOut(handle: Long): Boolean
     private external fun nativeGetPlayerHand(handle: Long): String
     private external fun nativeGetDealerHand(handle: Long, revealAll: Boolean): String
+    private external fun nativeDebugSetWallet(handle: Long, minutes: Int)
 
     companion object {
         init {
