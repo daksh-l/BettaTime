@@ -50,10 +50,10 @@ fun BlackjackScreen(onWalletBecamePositive: (() -> Unit)? = null) {
     var resetCodeInput by remember { mutableStateOf("") }
     var resetError by remember { mutableStateOf(false) }
 
-    fun refresh(revealDealer: Boolean) {
+    fun refresh() {
         wallet = engine.getWallet()
         playerHand = engine.getPlayerHand()
-        dealerHand = engine.getDealerHand(revealDealer)
+        dealerHand = engine.getDealerHand(true) // always fetch full hand now; hiding happens at render time
         state = engine.getState()
         WalletStore.saveWallet(context, wallet)
         if (wallet > 0) onWalletBecamePositive?.invoke()
@@ -75,7 +75,7 @@ fun BlackjackScreen(onWalletBecamePositive: (() -> Unit)? = null) {
                 WalletStore.markReset(context, 10)
                 betText = ""
                 message = "Your 2-hour allowance topped back up to 10 min."
-                refresh(revealDealer = false)
+                refresh()
                 millisUntilReset = WalletStore.millisUntilNextReset(context)
             }
         }
@@ -149,23 +149,23 @@ fun BlackjackScreen(onWalletBecamePositive: (() -> Unit)? = null) {
                 fontSize = 12.sp,
                 color = InkMuted
             )
-            Text(
-                text = dealerHand.ifBlank { "--" },
-                style = MaterialTheme.typography.bodyLarge,
-                color = InkWhite
+            Spacer(Modifier.height(6.dp))
+            // hide the dealer's hole card (index 1) only while the
+            // player is still deciding hit/stand -- once the round is
+            // settled or hasn't started, show the real hand
+            HandRow(
+                cards = parseHand(dealerHand),
+                hideIndex = if (state == GameState.PLAYER_TURN) 1 else null
             )
-            Spacer(Modifier.height(12.dp))
+            Spacer(Modifier.height(16.dp))
             Text(
                 text = "YOU",
                 fontFamily = FontFamily.Default,
                 fontSize = 12.sp,
                 color = InkMuted
             )
-            Text(
-                text = playerHand.ifBlank { "--" },
-                style = MaterialTheme.typography.bodyLarge,
-                color = InkWhite
-            )
+            Spacer(Modifier.height(6.dp))
+            HandRow(cards = parseHand(playerHand))
         }
 
         Spacer(Modifier.height(16.dp))
@@ -215,7 +215,7 @@ fun BlackjackScreen(onWalletBecamePositive: (() -> Unit)? = null) {
                             }
                             val outcome = engine.dealInitial()
                             message = outcome.description
-                            refresh(revealDealer = engine.getState() != GameState.PLAYER_TURN)
+                            refresh()
                         }
                     )
                 }
@@ -229,7 +229,7 @@ fun BlackjackScreen(onWalletBecamePositive: (() -> Unit)? = null) {
                             onClick = {
                                 val outcome = engine.hit()
                                 message = outcome.description
-                                refresh(revealDealer = engine.getState() != GameState.PLAYER_TURN)
+                                refresh()
                             }
                         )
                         Spacer(Modifier.width(14.dp))
@@ -240,7 +240,7 @@ fun BlackjackScreen(onWalletBecamePositive: (() -> Unit)? = null) {
                             onClick = {
                                 val outcome = engine.stand()
                                 message = outcome.description
-                                refresh(revealDealer = true)
+                                refresh()
                             }
                         )
                     }
@@ -255,7 +255,7 @@ fun BlackjackScreen(onWalletBecamePositive: (() -> Unit)? = null) {
                             engine.newRound()
                             betText = ""
                             message = "Place a bet to start."
-                            refresh(revealDealer = false)
+                            refresh()
                         }
                     )
                 }
@@ -311,7 +311,7 @@ fun BlackjackScreen(onWalletBecamePositive: (() -> Unit)? = null) {
                                     millisUntilReset = WalletStore.millisUntilNextReset(context)
                                     betText = ""
                                     message = "Place a bet to start."
-                                    refresh(revealDealer = false)
+                                    refresh()
                                     showResetDialog = false
                                 } else {
                                     resetError = true
