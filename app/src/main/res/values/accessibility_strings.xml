@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="accessibility_service_description">Watches for Instagram opening so BettaTime can lock it behind a hand of blackjack once your screen-time minutes run out.</string>
+</resources>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- felt green -->
+    <color name="felt_green">#0B3D2E</color>
+    <!-- darker green for card/surface panels -->
+    <color name="felt_green_dark">#123329</color>
+    <!-- gold for chips, CTAs, accents -->
+    <color name="chip_gold">#D4AF37</color>
+    <!-- brighter gold for pressed/highlight states -->
+    <color name="chip_gold_bright">#F0C948</color>
+    <!-- cream, primary text on dark surfaces -->
+    <color name="felt_cream">#F4EFE6</color>
+    <!-- muted card-suit red, used for losses/errors only -->
+    <color name="suit_red">#C1443C</color>
+    <!-- muted secondary text -->
+    <color name="felt_muted">#9FB3A8</color>
+
+    <!-- referenced by mipmap-anydpi-v26/ic_launcher.xml -->
+    <color name="ic_launcher_background">@color/felt_green</color>
+</resources>
